@@ -1,17 +1,27 @@
-import imageData from '../memesData'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 
 
 
 export default function MemeGenerator(){
 
-    const imageArray = imageData.data.memes
-    const randomNumber = Math.floor(Math.random() * imageArray.length)
+    const [memesArray, setMemesArray] = useState([])
+
+    useEffect(() => {
+        fetch('https://api.imgflip.com/get_memes')
+            .then(res => res.json())
+            .then(data => setMemesArray(data.data.memes))
+        // return () => {
+            
+        // };
+    }, []);
+   
+    const randomNumber = Math.floor(Math.random() * memesArray.length)
     const [memeImage, setMemeImage] = useState("")
 
     function handleClick(){
-        setMemeImage(prevMemeImage => imageArray[randomNumber].url)
+        setMemeImage(prevMemeImage => memesArray[randomNumber].url)
     }
+
     return(
         <section className="form-section">
                 <div className="form">
